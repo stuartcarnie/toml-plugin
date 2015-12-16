@@ -71,10 +71,10 @@
 
     <actions>
 
-        <!--<action class="org.toml.lang.actions.TomlCreateFileAction" id="Toml.NewTomlFile" text="Toml File"-->
-                <!--description="Create new Roml file">-->
-            <!--<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>-->
-        <!--</action>-->
+        <action class="org.toml.lang.actions.TomlCreateFileAction" id="Toml.NewTomlFile" text="Toml File"
+                description="Create new Toml file">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
     </actions>
 
 </idea-plugin>
