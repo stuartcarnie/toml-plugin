@@ -1,0 +1,162 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Buildscript
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+buildscript {
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+plugins {
+    id 'org.jetbrains.intellij' version "0.0.33"
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Configurations
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+configurations {
+    gen
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Projects
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+sourceSets {
+    main.java.srcDirs += "gen"
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// IntelliJ plugin
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+intellij {
+    pluginName 'IntelliJ TOML'
+
+    version ideaVersion
+    downloadSources Boolean.valueOf(downloadIdeaSources)
+
+    sandboxDirectory project.rootDir.canonicalPath + "/.sandbox"
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Dependencies
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-runtime:$kotlinVersion"
+
+    gen 'de.jflex:jflex:1.6.0'
+    gen files('lib/gk/grammar-kit-patched.jar')
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Tasks
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+def jflexArgs(srcFlex, targetDir) {
+    return [    "--skel",   "src/main/kotlin/org/toml/lang/core/lexer/TomlLexer.skeleton",
+                "-d",       targetDir,
+                srcFlex
+    ]
+}
+
+task generateTomlLexer(type: JavaExec) {
+    ext.src = "src/main/kotlin/org/toml/lang/core/lexer/TomlLexer.flex"
+    ext.dst = "gen/org/toml/lang/core/lexer/"
+
+    main = "jflex.Main"
+
+    args = jflexArgs(src, dst)
+
+    inputs  .file   file(src)
+    outputs .dir    file(dst + "_TomlLexer.java")
+
+    classpath configurations.gen
+}
+
+task generateTomlPsiAndParser(type: JavaExec) {
+    ext.src     = "src/main/kotlin/org/toml/lang/core/grammar/toml.bnf"
+    ext.dstRoot = "gen"
+
+    main = "org.intellij.grammar.Main"
+
+    args = [ dstRoot, file(src) ]
+
+    inputs  .file   file(src)
+    outputs .dir    fileTree(dir: dstRoot + '/org/toml/lang/core/', include: '**/*.java')
+
+    classpath configurations.gen
+}
+
+task generateLexers {
+    dependsOn generateTomlLexer
+}
+
+task generateParsers {
+    dependsOn generateTomlPsiAndParser
+}
+
+task generate {
+    dependsOn generateLexers, generateParsers
+}
+
+generate.mustRunAfter clean
+
+task generateClean {
+    dependsOn clean, generate
+}
+
+
+compileJava     .dependsOn generate
+compileKotlin   .dependsOn generate
+
+compileTestJava     .dependsOn generate
+compileTestKotlin   .dependsOn generate
+
+
+clean {
+    delete "gen"
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// IDE support
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+apply plugin: 'idea'
+
+idea {
+    project {
+        jdkName         = javaVersion
+        languageLevel   = javaVersion
+    }
+
+    module {
+        generatedSourceDirs += file('gen')
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Misc
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+version = "${version}.$buildNumber"

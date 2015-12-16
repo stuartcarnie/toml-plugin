@@ -1,0 +1,80 @@
+<idea-plugin version="2">
+    <id>org.toml.lang</id>
+    <name>TOML</name>
+    <version>0.0.1</version>
+
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+      TOML support
+    ]]></description>
+
+    <!--<change-notes><![CDATA[-->
+    <!--Add change notes here.<br>-->
+    <!--<em>most HTML tags may be used</em>-->
+    <!--]]>-->
+    <!--</change-notes>-->
+
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <!--
+        <additionalTextAttributes scheme="Default" file="org/rust/lang/colorscheme/RustDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="org/rust/lang/colorscheme/RustDarcula.xml"/>
+        -->
+
+        <!-- Inspections -->
+
+        <!-- Toml -->
+
+        <fileTypeFactory implementation="org.toml.lang.TomlFileTypeFactory"/>
+
+        <lang.parserDefinition language="TOML" implementationClass="org.toml.lang.core.parser.TomlParserDefinition"/>
+
+        <!-- Syntax Highlighter -->
+
+        <lang.syntaxHighlighterFactory language="TOML" implementationClass="org.toml.lang.TomlHighlighterFactory"/>
+
+        <!-- Commenter -->
+
+        <lang.commenter language="TOML" implementationClass="org.toml.lang.TomlCommenter"/>
+
+        <!-- Brace Matcher -->
+
+        <lang.braceMatcher language="TOML" implementationClass="org.toml.lang.TomlBraceMatcher"/>
+
+        <!-- Quote Handlers -->
+
+        <lang.quoteHandler language="TOML" implementationClass="org.toml.lang.TomlQuoteHandler"/>
+
+        <!-- Annotator -->
+
+        <annotator language="TOML" implementationClass="org.toml.lang.annotator.TomlAnnotator"/>
+
+
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+
+        <!--<action class="org.toml.lang.actions.TomlCreateFileAction" id="Toml.NewTomlFile" text="Toml File"-->
+                <!--description="Create new Roml file">-->
+            <!--<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>-->
+        <!--</action>-->
+    </actions>
+
+</idea-plugin>
