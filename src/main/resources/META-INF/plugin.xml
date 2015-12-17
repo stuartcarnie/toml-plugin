@@ -25,6 +25,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
+        <!-- Color Settings -->
+
+        <colorSettingsPage implementation="org.toml.lang.colorscheme.TomlColorSettingsPage"/>
+
         <!--
         <additionalTextAttributes scheme="Default" file="org/rust/lang/colorscheme/RustDefault.xml"/>
         <additionalTextAttributes scheme="Darcula" file="org/rust/lang/colorscheme/RustDarcula.xml"/>

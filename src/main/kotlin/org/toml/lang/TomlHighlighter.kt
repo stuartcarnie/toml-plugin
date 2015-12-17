@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 import gnu.trove.THashMap
+import org.toml.lang.colorscheme.TomlColors
 import org.toml.lang.core.lexer.TomlLexer
 import org.toml.lang.core.psi.TomlTypes
 
@@ -25,23 +26,23 @@ class TomlHighlighter : SyntaxHighlighterBase() {
 
 private fun makeTokenMap(): Map<IElementType, TextAttributesKey> {
     val result = THashMap<IElementType, TextAttributesKey>()
-    result[TomlTypes.KEY] =
-            TextAttributesKey.createTextAttributesKey("TOML_KEY", DefaultLanguageHighlighterColors.KEYWORD)
 
-    result[TomlTypes.COMMENT] =
-            TextAttributesKey.createTextAttributesKey("TOML_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
+    result[TomlTypes.KEY] = TomlColors.KEY
 
-    result[TomlTypes.STRING] =
-            TextAttributesKey.createTextAttributesKey("TOML_STRING", DefaultLanguageHighlighterColors.STRING)
+    result[TomlTypes.COMMENT] = TomlColors.LINE_COMMENT
 
-    result[TomlTypes.NUMBER] =
-            TextAttributesKey.createTextAttributesKey("TOML_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
+    result[TomlTypes.STRING] = TomlColors.STRING
 
-    result[TomlTypes.BOOLEAN] =
-            TextAttributesKey.createTextAttributesKey("TOML_BOOLEAN", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
+    result[TomlTypes.NUMBER] = TomlColors.NUMBER
 
-    result[TomlTypes.DATE] =
-            TextAttributesKey.createTextAttributesKey("TOML_DATE", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
+    result[TomlTypes.BOOLEAN] = TomlColors.BOOLEAN
+
+    result[TomlTypes.DATE] = TomlColors.DATE
+
+    result[TomlTypes.LBRACKET] = TomlColors.BRACKETS
+    result[TomlTypes.RBRACKET] = TomlColors.BRACKETS
+    result[TomlTypes.LBRACE] = TomlColors.BRACES
+    result[TomlTypes.RBRACE] = TomlColors.BRACES
 
     return result;
 }
