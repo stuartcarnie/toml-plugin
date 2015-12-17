@@ -33,7 +33,6 @@ public class TomlParserDefinition : ParserDefinition {
     override fun getWhitespaceTokens(): TokenSet =
             WHITE_SPACES
 
-
     override fun getCommentTokens(): TokenSet =
             COMMENTS
 
