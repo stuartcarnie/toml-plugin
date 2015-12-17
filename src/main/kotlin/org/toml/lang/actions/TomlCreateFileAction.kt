@@ -10,7 +10,7 @@ import org.toml.lang.icons.TomlIcons
 private val NEW_TOML_FILE = "New TOML File"
 
 class TomlCreateFileAction : CreateFileFromTemplateAction(NEW_TOML_FILE, "", TomlIcons.TOML)
-                           , DumbAware {
+        , DumbAware {
 
     override fun getActionName(directory: PsiDirectory?, newName: String?, templateName: String?): String {
         return NEW_TOML_FILE
